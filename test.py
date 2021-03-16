@@ -5,10 +5,8 @@ from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfpage import PDFTextExtractionNotAllowed
 from pdfminer.pdfinterp import PDFResourceManager
 from pdfminer.pdfinterp import PDFPageInterpreter
-from pdfminer.pdfdevice import PDFDevice
 from pdfminer.layout import *
 from pdfminer.converter import PDFPageAggregator
-from fnmatch import fnmatch, fnmatchcase
 import os
 import shutil
 
@@ -51,7 +49,7 @@ def find_pdf_string(strings):
                     for x in layout:
                         if isinstance(x, LTTextBoxHorizontal) and x.get_text().find(strings) != -1:
                             have_find_cnts += 1
-                            with open('output.txt', 'a', encoding ='utf-8') as f:
+                            with open('output.txt', 'a', encoding='utf-8') as f:
                                 if find_flag == 0:
                                     # 在输出文档里写文件名并且复制一份到新文件夹中
                                     find_flag = 1
@@ -62,7 +60,7 @@ def find_pdf_string(strings):
                                         os.makedirs(pathnew)
                                     if os.path.exists(path_find) != 1:
                                         os.makedirs(path_find)
-                                    # 复制文件到FORMQL里面
+                                    # 复制文件到new里面
                                     shutil.copy(file, path_find + "//" + file)
                                 # 写找到的数据
                                 f.write("   " + x.get_text() + '\n')
@@ -71,6 +69,8 @@ def find_pdf_string(strings):
 
 if __name__ == '__main__':
     input_str = input("请输入想要搜索的文字（请不要输入标点符号）按回车键确定\n")
+    while input_str == "":
+        input_str = input("请不要直接输入空格，请重新输入文本，按回车键确定\n")
     print("finding......\n")
     output_str = find_pdf_string(input_str)
     print("查找完成，共找到" + str(output_str) + "个，具体结果可见output.txt，如果找到的结果大于1个，在new文件夹中对应名字的文件夹中已复制完成\n")
